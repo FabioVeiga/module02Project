@@ -1,0 +1,25 @@
+Main idea Project
+
+Project name: MyReviewBook
+
+My review book
+Users will write their own reviews and rating and they could share their opinion in the main screen.
+
+Main Screen
+This screen will show Navbar and divs
+  #Navbar - Fields to login (user and password) and one link to "How it works"
+  #Center: Shared reviews and rating (cards) and there were written by registered users
+     #These cards will have a button "Like" to any users
+     #One div will show the top 5 "likes" 
+  #Footer: Copyright
+  
+  #Page "How it works": What is the main achive.
+  
+
+Intern Screen (to users logged in)
+This screen will show:
+  #Navbar with user's name, link to logout, link to register a new review
+  #Center: 
+    #One grid with all books registered on it
+    #This grid will have to buttons "Edit" and "Delete"
+    #One fiels to search anything

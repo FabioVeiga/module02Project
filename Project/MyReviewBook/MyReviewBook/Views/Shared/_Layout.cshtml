@@ -1,0 +1,201 @@
+﻿@{
+    string message = "";
+    string typeMessage = "";
+    string funcModal = "";
+    string userTyped = "";
+    string passTyped = "";
+    try
+    {
+        message = TempData["message"].ToString();
+        if(message != null)
+        {
+            switch (message)
+            {
+                case "noLogin":
+                    message = "User or Password don't exist!";
+                    funcModal = "openModel('messageModal')";
+                    break;
+                case "userInsertSucess":
+                    message = "User was created!";
+                    typeMessage = "Sucess";
+                    funcModal = "openModel('newUserModal')";
+                    break;
+                case "userExists":
+                    typeMessage = "Error";
+                    message = "User already exists!";
+                    funcModal = "openModel('newUserModal')";
+                    userTyped = TempData["userTyped"].ToString();
+                    passTyped = TempData["pasTyped"].ToString();
+                    funcModal = "openModel('newUserModal')";
+                    break;
+                default:
+                    typeMessage = "Error";
+                    message = "Something is wrong, try it again!";
+                    userTyped = TempData["userTyped"].ToString();
+                    passTyped = TempData["pasTyped"].ToString();
+                    funcModal = "openModel('newUserModal')";
+                    break;
+            }
+        }
+    }
+    catch { }
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - MyReviewBook</title>
+
+    <environment include="Development">
+        <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
+        <link rel="stylesheet" href="~/css/site.css" />
+    </environment>
+    <environment exclude="Development">
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css"
+              asp-fallback-href="~/lib/bootstrap/dist/css/bootstrap.min.css"
+              asp-fallback-test-class="sr-only" asp-fallback-test-property="position" asp-fallback-test-value="absolute" />
+        <link rel="stylesheet" href="~/css/site.min.css" asp-append-version="true" />
+    </environment>
+</head>
+<body onload="@funcModal">
+    <nav class="navbar bg-primary navbar-inverse navbar-fixed-top" id="navMain">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a asp-area="" asp-controller="Home" asp-action="Index" class="navbar-brand">MyReviewBook</a>
+            </div>
+            <div class="navbar-collapse collapse">
+                <ul class="nav navbar-nav">
+                    <li><a href="#">How it works</a></li>
+                </ul>
+                <form asp-controller="User" asp-action="Login" class="navbar-form navbar-left">
+                    <div class="input-group">
+                        <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+                        <input id="user" type="text" class="form-control" name="user" placeholder="User" maxlength="15" required autofocus>
+                    </div>
+                    <div class="input-group">
+                        <span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
+                        <input id="password" type="password" class="form-control" name="password" placeholder="Password" maxlength="8" required>
+                        <div class="input-group-btn">
+                            <button class="btn btn-default" type="submit">
+                                <i class="glyphicon glyphicon-log-in"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <a class="btn btn-info" data-toggle="modal" data-target="#newUserModal">New user</a>
+                </form>
+            </div>
+        </div>
+    </nav>
+
+    <partial name="_CookieConsentPartial" />
+
+    <div class="container">
+        @RenderBody()
+    </div>
+    <div id="footer">
+        <p>&copy; 2020-<label id="yearCurrent"></label></p>
+    </div>
+    
+    <div class="modal fade" id="messageModal" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+                <div class="modal-header text-center">
+                    <span class="alert-danger"><b>Error!</b></span>
+                </div>
+                <div class="modal-body">
+                    <i>@message</i>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="newUserModal" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+                <div class="modal-header text-center">
+                    <b>New user</b>
+                </div>
+                <form asp-controller="User" asp-action="Newuser">
+                    <div class="modal-body">
+
+                        <div class="input-group">
+                            <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+                            <input id="user" type="text" class="form-control" name="user" placeholder="User" maxlength="15" required autofocus value="@userTyped">
+                        </div>
+                        <div class="input-group">
+                            <span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
+                            <input id="password" type="password" class="form-control" name="password" placeholder="Password" maxlength="8" required value="@passTyped">
+                        </div>
+                        @{
+                            if (typeMessage != "")
+                            {
+                                if (typeMessage == "Error")
+                                {
+                                    <hr />
+                                    <div class="alert alert-danger" role="alert">
+                                        <b>@typeMessage!</b> @message
+                                    </div>
+                                }
+                                else
+                                {
+                                    <hr />
+                                    <div class="alert alert-success" role="alert">
+                                        <b>@typeMessage!</b> @message
+                                    </div>
+                                }
+
+                            }
+                        }
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-success">Save</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <environment include="Development">
+        <script src="~/lib/jquery/dist/jquery.js"></script>
+        <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
+        <script src="~/js/site.js" asp-append-version="true"></script>
+    </environment>
+    <environment exclude="Development">
+        <script src="https://ajax.aspnetcdn.com/ajax/jquery/jquery-3.3.1.min.js"
+                asp-fallback-src="~/lib/jquery/dist/jquery.min.js"
+                asp-fallback-test="window.jQuery"
+                crossorigin="anonymous"
+                integrity="sha384-tsQFqpEReu7ZLhBV2VZlAu7zcOV+rXbYlF2cqB8txI/8aZajjp4Bqd+V6D5IgvKT">
+        </script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"
+                asp-fallback-src="~/lib/bootstrap/dist/js/bootstrap.min.js"
+                asp-fallback-test="window.jQuery && window.jQuery.fn && window.jQuery.fn.modal"
+                crossorigin="anonymous"
+                integrity="sha384-aJ21OjlMXNL5UyIl/XNwTMqvzeRMZH2w8c5cRVpzpU8Y5bApTppSuUkhZXN0VxHd">
+        </script>
+        <script src="~/js/site.min.js" asp-append-version="true"></script>
+    </environment>
+
+    @RenderSection("Scripts", required: false)
+</body>
+</html>
+
+<script>
+    var d = new Date();
+    document.getElementById("yearCurrent").innerHTML = d.getFullYear();
+
+    function openModel(modalName) {
+        $("#"+modalName).modal()
+    }
+</script>
