@@ -24,6 +24,12 @@ namespace MyReviewBook
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            //Add service to use Session
+            services.AddMvc();
+            services.AddSession();
+            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+            services.AddHttpContextAccessor();
+
             services.Configure<CookiePolicyOptions>(options =>
             {
                 // This lambda determines whether user consent for non-essential cookies is needed for a given request.
@@ -51,6 +57,9 @@ namespace MyReviewBook
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseCookiePolicy();
+            //Add service to use Session
+            app.UseSession();
+            app.UseMvc();
 
             app.UseMvc(routes =>
             {

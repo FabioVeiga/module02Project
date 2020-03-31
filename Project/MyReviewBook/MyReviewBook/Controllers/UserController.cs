@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using MyReviewBook.Models;
 
@@ -9,14 +10,21 @@ namespace MyReviewBook.Controllers
 {
     public class UserController : Controller
     {
+        IHttpContextAccessor HttpContextAccessor;
+        public UserController(IHttpContextAccessor httpContextAccessor)
+        {
+            HttpContextAccessor = httpContextAccessor;
+        }
 
         [HttpPost]
         public IActionResult Login(string user, string password)
         {
-            UserModel localUser = new UserModel();
+            UserModel localUser = new UserModel();           
             bool flagLogin = localUser.getLogin(user, password);
             if (flagLogin)
             {
+                //Register user in session
+                HttpContext.Session.SetString("userSession", user);
                 return RedirectToAction("Index", "Dashboard");
             }
             TempData["message"] = "noLogin";
@@ -46,5 +54,49 @@ namespace MyReviewBook.Controllers
             }
             return RedirectToAction("Index", "Home");
         }
+
+        public IActionResult Logoff()
+        {
+            HttpContext.Session.SetString("userSession", "");
+            return RedirectToAction("Index", "Home");
+        }
+        [HttpPost]
+        public IActionResult ChangePassword(string user, string password)
+        {
+            UserModel localUser = new UserModel();
+            bool flag = localUser.updatePassword(user, password);
+            if (flag)
+            {
+                TempData["message"] = "userPasswordUpdated";
+            }
+            else
+            {
+                TempData["message"] = "userPasswordError";
+            }
+            TempData["idModalShow"] = "changePassword";
+            TempData["passTyped"] = "password";
+            return RedirectToAction("Index", "Dashboard");
+        }
+        
+        public IActionResult ChangeActive()
+        {
+            UserModel localUser = new UserModel(HttpContextAccessor);
+            string user = localUser.GetUserSession();
+            char flagActive = localUser.updateActiveUser(user);
+            TempData["isUserActived"] = flagActive;
+            return RedirectToAction("Index", "Dashboard");
+        }
+
+        [HttpPost]
+        public IActionResult ChangePicture(string urlPicture)
+        {
+            UserModel localUser = new UserModel(HttpContextAccessor);
+            string user = localUser.GetUserSession();
+            localUser.updatePictureUser(user, urlPicture);
+            string picture = localUser.getPictureUser(user);
+            TempData["picture"] = picture;
+            return RedirectToAction("Index", "Dashboard");
+        }
+
     }
 }

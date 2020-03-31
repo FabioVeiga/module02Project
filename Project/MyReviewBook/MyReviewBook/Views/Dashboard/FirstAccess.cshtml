@@ -1,0 +1,68 @@
+﻿@{
+    Layout = "../Shared/_LayoutIntern.cshtml";
+}
+<style>
+    #divMainFirstAccess{
+        width: 70%;
+        margin-left: 15%;
+        padding: 0 5% 0 5%;
+    }
+    #divValidData,#divQuestion {
+        border: 1px solid;
+        border-radius: 10px;
+        padding: 0 5% 0 5%;
+    }
+    #divFooterFirstAccess{
+        text-align:center;
+    }
+    #divValidData, #divQuestion, #divFooterFirstAccess{
+        padding-bottom: 20px;
+        margin: 20px 0 20px 0;
+    }
+</style>
+
+<div>
+    <div id="divMainFirstAccess">
+        <div style="text-align:center;">
+            <h2>In case that you forget the password</h2>
+        </div>
+        <form asp-controller="Dashboard" asp-action="UpdateFirstAccess">
+            <div class="divFirstAccess" id="divValidData">
+                <h4>Valid data</h4>
+                <div class="input-group">
+                    <span class="input-group-addon">Type Data</span>
+                    <select class="form-control" id="typeData" name="typeData" required autofocus>
+                        <option value="birthday">Birthday</option>
+                        <option value="email">Address Email</option>
+                        <option value="phone">Phone</option>
+                        <option value="mothersName">Mother’s name</option>
+                        <option value="fatherName">Father’s name</option>
+                    </select>
+                </div>
+                <br />
+                <div class="input-group">
+                    <span class="input-group-addon">Data Valid</span>
+                    <input type="text" class="form-control" id="validDate" name="validDate" maxlength="50" placeholder="Valid data" required autofocus>
+                </div>
+            </div>
+            <div class="divFirstAccess" id="divQuestion">
+                <h4>Question and Answer</h4>
+                <div class="input-group">
+                    <span class="input-group-addon">Question</span>
+                    <input type="text" class="form-control" id="question" name="question" maxlength="100" required autofocus>
+                </div>
+                <br />
+                <div class="input-group">
+                    <span class="input-group-addon">Answer</span>
+                    <input type="text" class="form-control" id="answer" name="answer" maxlength="100" required autofocus>
+                </div>
+            </div>
+            <div id="divFooterFirstAccess">
+                <span class="alert alert-info"><b>Info!</b> This page just will show one time.</span>
+                <button type="submit" class="btn btn-success" style="height:47px;">Submit</button>
+            </div>
+            
+        </form>
+    </div>
+</div>
+

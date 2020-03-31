@@ -1,0 +1,300 @@
+﻿@using Microsoft.AspNetCore.Http;
+@inject IHttpContextAccessor HttpContextAccessor
+@{
+    string userSession = @HttpContextAccessor.HttpContext.Session.GetString("userSession");
+    string message = "";
+    string typeMessage = "";
+    string funcModal = "";
+    string idModalShow = "";
+    string passTyped = "";
+    char isUserActived = char.Parse(TempData["isUserActived"].ToString());
+    string labelUserActived = "";
+    string pictureUser = TempData["picture"].ToString();
+    try
+    {
+        message = TempData["message"].ToString();
+        if (message != null)
+        {
+            switch (message)
+            {
+                case "userPasswordUpdated":
+                    message = "Password was updated";
+                    typeMessage = "Sucess";
+                    idModalShow = TempData["idModalShow"].ToString();
+                    funcModal = $"openModel('{idModalShow}')";
+                    break;
+                case "userPasswordError":
+                    message = "Something is wrong! Try again!";
+                    typeMessage = "Error";
+                    idModalShow = TempData["idModalShow"].ToString();
+                    funcModal = $"openModel('{idModalShow}')";
+                    break;
+            }
+        }
+    }
+    catch { }
+
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>MyReviewBook</title>
+
+    <environment include="Development">
+        <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
+        <link rel="stylesheet" href="~/css/intern.css" />
+        <link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+        <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
+        <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+        <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
+    </environment>
+    <environment exclude="Development">
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css"
+              asp-fallback-href="~/lib/bootstrap/dist/css/bootstrap.min.css"
+              asp-fallback-test-class="sr-only" asp-fallback-test-property="position" asp-fallback-test-value="absolute" />
+        <link rel="stylesheet" href="~/css/site.min.css" asp-append-version="true" />
+    </environment>
+</head>
+<body onload="@funcModal">
+    <nav class="navbar navbar-inverse sidebar" role="navigation">
+        <div class="container-fluid">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-sidebar-navbar-collapse-1">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="#">MyReviewBook</a>
+            </div>
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse" id="bs-sidebar-navbar-collapse-1">
+                <ul class="nav navbar-nav">
+                    <li style="height:150px;">
+                        <div id="divPictureProfile">
+                            <a href="#" onclick="openModel('changePicture')" data-toggle="tooltip" data-placement="right" title="Change the picture!">
+                                @{
+                                    if (pictureUser == "noPicture")
+                                    {
+                                        <img id="imageProfile" src="~/images/photo.jpg" />
+                                    }
+                                    else
+                                    {
+                                        <img id="imageProfile" src="@pictureUser" />
+                                    }
+                                }
+
+                            </a>
+                        </div>
+                        <div id="divHiUser">
+                            <p class="pMenu">Hello, @userSession.</p>
+                        </div>
+                    </li>
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Profile <span class="caret"></span><span style="font-size:16px;" class="pull-right hidden-xs showopacity glyphicon glyphicon-user"></span></a>
+                        <ul class="dropdown-menu forAnimate" role="menu">
+                            <li><a href="#" onclick="openModel('changePassword')">Change password</a></li>
+                            <li>
+                                <a asp-action="ChangeActive" asp-controller="User" data-toggle="tooltip" data-placement="right" title="If you deactivate, you just can do a LOGIN, no more!">
+                                    @{labelUserActived = (isUserActived == char.Parse("1") ? "Activate" : "Deactivate");}@labelUserActived
+                                    <span style="font-size:16px;" class="pull-right hidden-xs">
+                                        @{
+                                            if (isUserActived == '1')
+                                            {
+                                                <span class="glyphicon glyphicon-check"></span>
+                                            }
+                                            else
+                                            {
+                                                <span class="glyphicon glyphicon-unchecked"></span>
+                                            }
+                                        }
+
+                                    </span>
+                                </a>
+                            </li>
+                            <li><a asp-action="Logoff" asp-controller="User">Logoff</a></li>
+                        </ul>
+                    </li>
+                    <li><a href="#">Messages<span style="font-size:16px;" class="pull-right hidden-xs showopacity glyphicon glyphicon-envelope"></span></a></li>
+                    @{
+                        if (userSession == "admin")
+                        {
+                            <li class="dropdown">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Settings <span class="caret"></span><span style="font-size:16px;" class="pull-right hidden-xs showopacity glyphicon glyphicon-cog"></span></a>
+                                <ul class="dropdown-menu forAnimate" role="menu">
+                                    <li><a href="#">Action</a></li>
+                                    <li><a href="#">Another action</a></li>
+                                    <li><a href="#">Something else here</a></li>
+                                    <li class="divider"></li>
+                                    <li><a href="#">Separated link</a></li>
+                                    <li class="divider"></li>
+                                    <li><a href="#">One more separated link</a></li>
+                                </ul>
+                            </li>
+                        }
+                    }
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <div class="main">
+
+        @RenderBody()
+
+        <div class="modal fade" id="Modal" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-sm">
+                <div class="modal-content">
+                    <div class="modal-header text-center">
+                        <h3 id="titleModal"></h3>
+                    </div>
+                    <div class="modal-body">
+                        @{
+                            if (isUserActived == '1')
+                            {
+                                <div id="changePassword" style="display:none">
+                                    <form asp-controller="User" asp-action="ChangePassword">
+                                        <div class="input-group">
+                                            <span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
+                                            <input id="password" type="password" class="form-control" name="password" placeholder="Password" maxlength="8" required value="@passTyped">
+                                            <input type="hidden" name="user" id="user" value="@userSession" />
+                                        </div>
+                                        @{
+                                            if (typeMessage != "")
+                                            {
+                                                if (typeMessage == "Error")
+                                                {
+                                                    <hr />
+                                                    <div class="alert alert-danger" role="alert">
+                                                        <b>@typeMessage!</b> @message
+                                                    </div>
+                                                }
+                                                else
+                                                {
+                                                    <hr />
+                                                    <div class="alert alert-success" role="alert">
+                                                        <b>@typeMessage!</b> @message
+                                                    </div>
+                                                }
+
+                                            }
+                                        }
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                            <button type="submit" class="btn btn-success">Save</button>
+                                        </div>
+                                    </form>
+                                </div>
+                                <div id="changePicture" style="display:none">
+                                    <form asp-controller="User" asp-action="ChangePicture">
+                                        <div class="input-group">
+                                            <span class="input-group-addon"><i class="glyphicon glyphicon-picture"></i></span>
+                                            <input type="text" class="form-control" name="urlPicture" id="urlPicture" placeholder="Paste your URL">
+                                        </div>
+                                        <hr />
+                                        <span class="alert alert-info">Or keep it blank to set up the dafault picture</span>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                            <button type="submit" class="btn btn-success">Save</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            }
+                            else
+                            {
+                                <script> document.getElementById("titleModal").innerHTML = "Warning"</script>
+                                <div class="alert alert-danger" role="alert">
+                                    <b>Attention!</b> You are not activated.
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                </div>
+                            }
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <partial name="_CookieConsentPartial" />
+
+    <environment include="Development">
+        <script src="~/lib/jquery/dist/jquery.js"></script>
+        <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
+        <script src="~/js/site.js" asp-append-version="true"></script>
+    </environment>
+    <environment exclude="Development">
+        <script src="https://ajax.aspnetcdn.com/ajax/jquery/jquery-3.3.1.min.js"
+                asp-fallback-src="~/lib/jquery/dist/jquery.min.js"
+                asp-fallback-test="window.jQuery"
+                crossorigin="anonymous"
+                integrity="sha384-tsQFqpEReu7ZLhBV2VZlAu7zcOV+rXbYlF2cqB8txI/8aZajjp4Bqd+V6D5IgvKT">
+        </script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"
+                asp-fallback-src="~/lib/bootstrap/dist/js/bootstrap.min.js"
+                asp-fallback-test="window.jQuery && window.jQuery.fn && window.jQuery.fn.modal"
+                crossorigin="anonymous"
+                integrity="sha384-aJ21OjlMXNL5UyIl/XNwTMqvzeRMZH2w8c5cRVpzpU8Y5bApTppSuUkhZXN0VxHd">
+        </script>
+        <script src="~/js/site.min.js" asp-append-version="true"></script>
+    </environment>
+
+    @RenderSection("Scripts", required: false)
+</body>
+</html>
+
+<script>
+    var d = new Date();
+    document.getElementById("yearCurrent").innerHTML = d.getFullYear();
+
+    function openModel(divName) {
+        $("#Modal").modal();
+        var titleModal = document.getElementById("titleModal");
+        hideDiv();
+        switch (divName) {
+            case 'changePassword':
+                titleModal.innerHTML = "Change Password";
+                break;
+            case 'changePicture':
+                titleModal.innerHTML = "Change Picture";
+                break;
+            default:
+                titleModal.innerHTML = "Warning";
+        }
+        document.getElementById(divName).style.display = "block";
+    }
+    function hideDiv() {
+        document.getElementById("changePassword").style.display = "none";
+        document.getElementById("changePicture").style.display = "none";
+    }
+
+    function htmlbodyHeightUpdate() {
+        var height3 = $(window).height()
+        var height1 = $('.nav').height() + 50
+        height2 = $('.main').height()
+        if (height2 > height3) {
+            $('html').height(Math.max(height1, height3, height2) + 10);
+            $('body').height(Math.max(height1, height3, height2) + 10);
+        }
+        else {
+            $('html').height(Math.max(height1, height3, height2));
+            $('body').height(Math.max(height1, height3, height2));
+        }
+    }
+
+    $(document).ready(function () {
+        htmlbodyHeightUpdate()
+        $(window).resize(function () {
+            htmlbodyHeightUpdate()
+        });
+        $(window).scroll(function () {
+            height2 = $('.main').height()
+            htmlbodyHeightUpdate()
+        });
+        $('[data-toggle="tooltip"]').tooltip();
+    });
+
+</script>

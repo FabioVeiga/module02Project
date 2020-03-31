@@ -17,7 +17,7 @@ namespace MyReviewBook.Useful
 
         public ConnectionDB()
         {
-            conn = new MySqlConnection($"Server={Server};Database={DataBase};Uid={User};Pwd={Pass}");
+            conn = new MySqlConnection($"Server={Server};Database={DataBase};Uid={User};Pwd={Pass};");
             conn.Open();
         }
 

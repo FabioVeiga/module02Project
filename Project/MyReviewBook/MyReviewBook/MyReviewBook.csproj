@@ -11,4 +11,14 @@
     <PackageReference Include="MySql.Data" Version="8.0.19" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Content Update="Views\Shared\_LayoutIntern.cshtml">
+      <Pack>$(IncludeRazorContentInPack)</Pack>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="wwwroot\images\" />
+  </ItemGroup>
+
 </Project>

@@ -28,3 +28,6 @@ E:\IBT\Developing Web Applications\Project\MyReviewBook\MyReviewBook\bin\Debug\n
 E:\IBT\Developing Web Applications\Project\MyReviewBook\MyReviewBook\obj\Debug\netcoreapp2.1\MyReviewBook.Views.pdb
 E:\IBT\Developing Web Applications\Project\MyReviewBook\MyReviewBook\obj\Debug\netcoreapp2.1\MyReviewBook.csproj.CopyComplete
 E:\IBT\Developing Web Applications\Project\MyReviewBook\MyReviewBook\obj\Debug\netcoreapp2.1\MyReviewBook.csprojAssemblyReference.cache
+E:\IBT\Developing Web Applications\Project\MyReviewBook\MyReviewBook\obj\Debug\netcoreapp2.1\Razor\Views\Shared\_LayoutIntern.g.cshtml.cs
+E:\IBT\Developing Web Applications\Project\MyReviewBook\MyReviewBook\obj\Debug\netcoreapp2.1\Razor\Views\Dashboard\FirstAccess.g.cshtml.cs
+E:\IBT\Developing Web Applications\Project\MyReviewBook\MyReviewBook\obj\Debug\netcoreapp2.1\Razor\Views\Home\ForgotPassword.g.cshtml.cs
