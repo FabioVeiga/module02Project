@@ -210,7 +210,6 @@ input:checked + .slider:before {
     .slider.round:before {
         border-radius: 50%;
     }
-
 #divPictureProfile {
     height:75px;
     width:75px; 
@@ -242,5 +241,5 @@ p.pMenu{
 }
 
 #Modal {
-    padding-right: 50%;
+    padding-right: 600px;
 }

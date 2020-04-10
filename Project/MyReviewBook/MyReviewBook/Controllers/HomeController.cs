@@ -27,7 +27,7 @@ namespace MyReviewBook.Controllers
             bool flag = localUser.validUser(user);
             if (flag)
             {
-                char isFirstAccess = localUser.GetFirstAccess(user);
+                char isFirstAccess = localUser.getFirstAccess(user);
                 if(isFirstAccess == '0')
                 {
                     string[] typeData = localUser.getValidData(user);

@@ -4,28 +4,55 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using MyReviewBook.Models;
 
 namespace MyReviewBook.Controllers
 {
     public class DashboardController : Controller
     {
+        IHttpContextAccessor HttpContextAccessor;
+        ITempDataDictionaryFactory MyTempData;
+        public DashboardController(IHttpContextAccessor httpContextAccessor, ITempDataDictionaryFactory tempData)
+        {
+            HttpContextAccessor = httpContextAccessor;
+            MyTempData = tempData;
+            DashboardModel dashboard = new DashboardModel(HttpContextAccessor, MyTempData);
+            bool flag = dashboard.validUserSession();
+            if (flag)
+            {
+                dashboard.loadDataTemp(dashboard);
+            }
+        }
+
+        public IActionResult Login(string user, string password)
+        {
+            DashboardModel dashboard = new DashboardModel();
+            bool flagLogin = dashboard.User.getLogin(user, password);
+            if (flagLogin)
+            {
+                //Register user in session
+                HttpContext.Session.SetString("userSession", user);
+                return RedirectToAction("Index", "Dashboard");
+            }
+            TempData["message"] = "noLogin";
+            return RedirectToAction("Index", "Home");
+        }
+
+        public IActionResult Logoff()
+        {
+            HttpContext.Session.SetString("userSession", "");
+            return RedirectToAction("Index", "Home");
+        }
+
         public IActionResult Index()
         {
-            string user = HttpContext.Session.GetString("userSession");
-            if(user == "" || user == null)
+            DashboardModel dashboard = new DashboardModel(HttpContextAccessor);
+            string userSession = dashboard.getUserSession();
+            bool flag = dashboard.validUserSession();
+            if (flag)
             {
-                return RedirectToAction("Index", "Home");
-            }
-            else
-            {
-                UserModel userModel = new UserModel();
-                char isActivated = userModel.getUserActive(user);
-                string picture = userModel.getPictureUser(user);
-                char firstAcess = userModel.GetFirstAccess(user);
-                TempData["picture"] = picture;
-                TempData["isUserActived"] = isActivated;
-                //Verify first access
+                char firstAcess = dashboard.User.getFirstAccess(userSession);
                 if (firstAcess == '1')
                 {
                     return RedirectToAction("FirstAccess", "Dashboard");
@@ -35,35 +62,44 @@ namespace MyReviewBook.Controllers
                     return View();
                 }
             }
+            else
+            {
+                return RedirectToAction("Index", "Home");
+            }
         }
 
         public IActionResult FirstAccess()
         {
-            string user = HttpContext.Session.GetString("userSession");
-            UserModel userModel = new UserModel();
-            char isActivated = userModel.getUserActive(user);
-            string picture = userModel.getPictureUser(user);
-            char firstAcess = userModel.GetFirstAccess(user);
-            TempData["picture"] = picture;
-            TempData["isUserActived"] = isActivated;
-            if(firstAcess == '0')
+            DashboardModel dashboard = new DashboardModel(HttpContextAccessor);
+            string userSession = dashboard.getUserSession();
+            bool flag = dashboard.validUserSession();
+            if (flag)
             {
-                return RedirectToAction("Index", "Dashboard");
+                char firstAcess = dashboard.User.getFirstAccess(userSession);
+                if (firstAcess == '0')
+                {
+                    return RedirectToAction("Index", "Dashboard");
+                }
+                else
+                {
+                    return View();
+                }
             }
             else
             {
-                return View();
+                return RedirectToAction("Index", "Home");
             }
         }
 
         public IActionResult UpdateFirstAccess(string typeData, string validDate, string question, string answer)
         {
-            string user = HttpContext.Session.GetString("userSession");
+            DashboardModel dashboard = new DashboardModel(HttpContextAccessor);
+            string userSession = dashboard.getUserSession();
             UserModel localUser = new UserModel();
-            bool flag = localUser.updateForgetPassword(user, typeData, validDate, question, answer);
+            bool flag = dashboard.User.updateForgetPassword(userSession, typeData, validDate, question, answer);
             if (flag)
             {
-                flag = localUser.updateFirstAccess(user);
+                flag = localUser.updateFirstAccess(userSession);
                 if (flag)
                 {
                     return RedirectToAction("Index", "Dashboard");

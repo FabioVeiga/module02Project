@@ -1,0 +1,87 @@
+Main idea Project
+
+Project name: MyReviewBook
+
+My review book
+Users will write their own reviews and rating and they could share their opinion on the main screen.
+
+Main Screen
+This screen will show Navbar and divs
+ #Navbar - Fields to login (user and password), one button "New User" and other "Forgot Password" and one link to "How it works"
+ #Center: Shared reviews and rating (cards) and there were written by registered users
+   #These cards will have a button "Like" to any users
+   #One div will show the top 5 "likes" 
+ #Footer: Copyright
+ #Page "How it works": What are the main goals.
+
+Intern Screen (just for logged users)
+This screen will show:
+ #Navbar with user's name, link to log out, link to register a new review
+ #Center: 
+  #One grid with all books registered on it
+  #This grid will have to buttons "Edit" and "Delete"
+  #One field to search for anything
+  
+Business' rules
+ #Module user:
+   #Index Page
+     #The user can register himself giving one userName and Password
+     #To login the user has to provide userName and Password
+	 #If the user forgot his password the system will provide three steps for it
+	   #Fisrt step: The user needs to type his User
+	   #Second step: The user needs to provide a valid data
+	   #Third  step: To ask correctly one question
+   #The system has to validate them
+     #If it doesn't correct, return error
+	 #If correct redirect to Intern Screen
+   #For to the first login
+     #The user has to follow two steps in case he forgot the Password
+	   #Fisrt step: The user has provide on date about him
+	   #Second step: The user has create one question and answer about anything
+   #In the Intern Page the user should be able to:
+     #Change his Picture
+	 #Change his Password
+	 #Active or Deactivate his account
+	 #Logoff
+
+ #Module book
+   #The will be able to register a new book giving the following datas
+     #NameBook, Author, PublishDate, QuantityPage, isReading, DateRead, Rating, Review, canPublishIt
+	   #The system will provide the datas (NameBook, Author, PublishDate, QuantityPage) in case someone has already registered it
+	   #The user will be able to search registered books
+	     #In the both way the system will look the book in own database, if the system doesn't find it the system will call a webservice to try to find it.
+	 #It will have two scenarios:
+	   #Fisrt: The user had read the book then the following fields will be mandatory
+	     #NameBook, Rating, DateRead, Review and, if the user would like to share it
+	   #Second: The user will read or he is reading then the following fields will be mandatory
+	     #NameBook and isReading
+  
+  #Module Service
+    This Service will be charge to search at WebService the following datas
+	  #NameBook, Author, PublishDate, QuantityPage
+	
+Sprint 01:
+  #Layout's design index and intern
+    #Index Page with:
+      #Login
+      #Register new Users
+      #Login's validation
+    #Intern Page with:
+      #Hi User
+      #Change password
+      #Logoff
+
+  #BUGs
+    #Name: TimeOut Session User
+    #Problem: The user can go back to intern page without login, but the system lose the session. 
+
+Sprint 02:
+  #Module Users:
+    #Active or Deactivateuser
+      #When users is deactivate, they just do a Login, no more.
+      #Change picture (They should set up an URL, if not the system set up the default image)
+  
+  #Fixed Bug
+    #Name: TimeOut Session User
+    #Problem: The user can go back to intern page without login, but the system lose the session.
+    #Solution: On DashboardControl was set a new contidicton, if userSession == null the user will be redirect to the index page

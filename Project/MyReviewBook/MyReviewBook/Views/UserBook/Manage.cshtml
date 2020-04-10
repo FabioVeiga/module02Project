@@ -1,0 +1,287 @@
+﻿@model DashboardModel
+@using MyReviewBook.Useful
+@using System.Collections
+@using Newtonsoft.Json
+@{
+    Layout = "../Shared/_LayoutIntern.cshtml";
+    int userId = 0;
+    string typeAction = "insert";
+    string typedTitle = "";
+    try
+    {
+        userId = int.Parse(TempData["userId"].ToString());
+        typeAction = TempData["typeAction"].ToString();
+        typedTitle = TempData["textSearched"].ToString();
+    }
+    catch { }
+}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.4/js/bootstrap-select.js"></script>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.4/css/bootstrap-select.css" rel="stylesheet" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.4/js/i18n/defaults-en_US.js"></script>
+
+<div class="container" id="divMain" style="width:80%; margin-left:5%;">
+    <div>
+        <h3>My Review</h3>
+    </div>
+    <hr />
+    <div>
+        @{
+            if (typeAction == "NewBook")
+            {
+                <form asp-controller="UserBook" asp-action="searchBook">
+                    <input type="hidden" name="userSession" value="@userId" />
+                    <input type="hidden" name="typeAction" value="@typeAction" />
+                    <div class="form-group col-md-12">
+                        <label>Title</label>
+                        <div class="input-group">
+                            <input type="text" class="form-control" id="titleBook" name="titleBook" required autofocus value="@typedTitle">
+                            <div class="input-group-btn">
+                                <button class="btn btn-info" type="submit">Check it!</button>
+                            </div>
+                        </div>
+                        <small class="form-text text-muted">
+                            Click at "Check it" to verify if the book that you look for already exists.
+                        </small>
+                    </div>
+                </form>
+                <div id="listBook" style="display:none;" class="form-row col-md-12">
+                    <div id="divBarBook">
+                        <div id="button">Click here to: <i class="glyphicon glyphicon-minus-sign"></i></div>
+                    </div>
+                    <div class="list-group" id="listBookContainer">
+                        @{
+                            if (ViewBag.ListBook != null)
+                            {
+                                foreach (var item in (List<DashboardModel>)ViewBag.ListBook)
+                                {
+                                    <form asp-action="Manage" asp-controller="UserBook">
+                                        <input type="hidden" asp-for="Book.NameBook" value="@item.Book.NameBook" />
+                                        <input type="hidden" asp-for="Book.Author" value="@item.Book.Author" />
+                                        <input type="hidden" asp-for="Book.PublishedData" value="@Helper.formatDate(item.Book.PublishedData.ToString())" />
+                                        <input type="hidden" asp-for="Book.QuantityPage" value="@item.Book.QuantityPage" />
+                                        <input type="hidden" asp-for="Book.GoogleId" value="@item.Book.GoogleId" />
+                                        <input type="hidden" asp-for="Book.IdBook" value="@item.Book.IdBook" />
+                                        <input type="hidden" asp-for="UserBook.IsReading" value="@item.UserBook.IsReading" />
+                                        <input type="hidden" asp-for="UserBook.DateRead" value="@Helper.formatDate(item.UserBook.DateRead.ToString())" />
+                                        <input type="hidden" asp-for="UserBook.Rating" value="@item.UserBook.Rating" />
+                                        <input type="hidden" asp-for="UserBook.Review" value="@item.UserBook.Review" />
+                                        <input type="hidden" asp-for="UserBook.CanPublishIt" value="@item.UserBook.CanPublishIt" />
+                                        <input type="hidden" name="userSession" value="@userId" />
+                                        @{
+                                            if (item.UserBook.hasBookWriteByUserId(userId, item.Book.IdBook) == item.Book.IdBook)
+                                            {
+                                                <input type="hidden" name="typeAction" value="edit" />
+                                                <div class="input-group">
+                                                    <span class="input-group-addon">Your review!</span>
+                                                    <button type="submit" class="list-group-item list-group-item-action list-group-item-warning">
+                                                        @item.Book.NameBook.ToString() (@item.Book.Author.ToString())
+                                                    </button>
+                                                </div>
+                                            }
+                                            else
+                                            {
+                                                <input type="hidden" name="typeAction" value="insert" />
+                                                <div class="input-group">
+                                                    <span class="input-group-addon">Write review</span>
+                                                    <button type="submit" class="list-group-item list-group-item-action list-group-item-info">
+                                                        @item.Book.NameBook.ToString() (@item.Book.Author.ToString())
+                                                    </button>
+                                                </div>
+                                            }
+                                        }
+                                    </form>
+                                }
+                            }
+                        }
+                    </div>
+                    <hr />
+                </div>
+            }
+        }
+    </div>
+    <form asp-action="ManagerBook" asp-controller="UserBook">
+        @{
+            if (typeAction != "NewBook")
+            {
+                <div class="form-group col-md-12">
+                    <label>Title</label>
+                    <input type="text" class="form-control" asp-for="Book.NameBook" maxlength="100" required autofocus>
+                </div>
+            }
+        }
+        <div class="form-row col-md-12">
+            <div class="form-group col-md-6" style="padding-left:0px;">
+                <label for="inputCity">Author</label>
+                <input type="text" class="form-control" asp-for="Book.Author" maxlength="50" autofocus>
+            </div>
+            <div class="form-group col-md-4" style="padding-left:0px;">
+                <label for="inputCity">Publish date</label>
+                @Html.TextBoxFor(m => m.Book.PublishedData, "{0:yyyy-MM-dd}", new { @class = "form-control", type = "date" })
+            </div>
+            <div class="form-group col-md-2" style="padding-right:0px; padding-left:0px;">
+                <label>Quantity of pages</label>
+                <input type="number" class="form-control" asp-for="Book.QuantityPage" maxlength="100" autofocus>
+            </div>
+        </div>
+        <div class="form-row col-md-12">
+            <div class="form-group col-md-3" style="padding-left:0px;">
+                <label>Are you reading?</label>
+                <div style="padding-top:10px;">
+                    <label class="switch">
+                        <input type="checkbox" class="form-control" asp-for="UserBook.IsReading">
+                        <span class="slider round"></span>
+                    </label>
+                </div>
+            </div>
+            <div class="form-group col-md-3" style="padding-left:0px; padding-right:30px;">
+                <label>Read date</label>
+                <input type="hidden" id="dateReadAux">
+                @Html.TextBoxFor(m => m.UserBook.DateRead, "{0:yyyy-MM-dd}", new { @class = "form-control", type = "date" })
+            </div>
+            <div class="form-group col-md-3" style="padding-right:0px; padding-left:0px;">
+                <label>Rating</label>
+                <select class="selectpicker" asp-for="UserBook.Rating">
+                    <option value="0">No rating</option>
+                    <option value="1" data-content="<i class='glyphicon glyphicon-star'></i><i class='glyphicon glyphicon-star-empty'></i><i class='glyphicon glyphicon-star-empty'></i><i class='glyphicon glyphicon-star-empty'></i><i class='glyphicon glyphicon-star-empty'></i>">1</option>
+                    <option value="2" data-content="<i class='glyphicon glyphicon-star'></i><i class='glyphicon glyphicon-star'></i><i class='glyphicon glyphicon-star-empty'></i><i class='glyphicon glyphicon-star-empty'></i><i class='glyphicon glyphicon-star-empty'></i>">2</option>
+                    <option value="3" data-content="<i class='glyphicon glyphicon-star'></i><i class='glyphicon glyphicon-star'></i><i class='glyphicon glyphicon-star'></i><i class='glyphicon glyphicon-star-empty'></i><i class='glyphicon glyphicon-star-empty'></i>">3</option>
+                    <option value="4" data-content="<i class='glyphicon glyphicon-star'></i><i class='glyphicon glyphicon-star'></i><i class='glyphicon glyphicon-star'></i><i class='glyphicon glyphicon-star'></i><i class='glyphicon glyphicon-star-empty'></i>">4</option>
+                    <option value="5" data-content="<i class='glyphicon glyphicon-star'></i><i class='glyphicon glyphicon-star'></i><i class='glyphicon glyphicon-star'></i><i class='glyphicon glyphicon-star'></i><i class='glyphicon glyphicon-star'></i>">5</option>
+                </select>
+            </div>
+            <div class="form-group col-md-3" style="padding-right:0px; padding-left:10px;">
+                <label>Can you share?</label>
+                <div style="padding-top:10px;">
+                    <label class="switch">
+                        <input type="checkbox" class="form-control" asp-for="UserBook.CanPublishIt">
+                        <span class="slider round"></span>
+                    </label>
+                    <input type="hidden" readonly id="CanPublishItAux" />
+                </div>
+            </div>
+        </div>
+        <div class="form-group col-md-12">
+            <label>Review</label>
+            @Html.TextAreaFor(m => m.UserBook.Review, new { @style = "height:130px", @class = "form-control" })
+            <small id="maxTypedMax" class="form-text text-muted">
+                Total word: <span id="display_count">0</span> words. Words left: <span id="word_left">300</span>
+            </small>
+        </div>
+        <div>
+            <input type="hidden" asp-for="UserBook.IdUser" value="@userId">
+            <input type="hidden" asp-for="Book.UserID" value="@userId">
+            <input type="hidden" asp-for="Book.GoogleId">
+            <input type="hidden" asp-for="Book.IdBook">
+            <input type="hidden" id="typeAction" name="typeAction" value="@typeAction" />
+            @{
+                if (typeAction == "NewBook")
+                {
+                    <input type="hidden" asp-for="Book.NameBook">
+                }
+            }
+            <input type="submit" class="btn btn-success" value="Save" id="sendBook" disabled />
+        </div>
+    </form>
+</div>
+
+<script>
+    //show or hide a the book list
+    $(document).ready(function () {
+        var searchTitle = $("#titleBook").val();
+        if (searchTitle != "") {
+            $("#listBook").show();
+        } else {
+            $("#listBook").hide();
+        }
+    });
+
+    $(window).load(function () {
+        isReadingCheck();
+    });
+
+    //Maximize or minimize the book list
+    $("#button").click(function () {
+        $(this).find('i').toggleClass('glyphicon-minus-sign').toggleClass('glyphicon-plus-sign');
+        $("#listBookContainer").slideToggle();
+    });
+
+    //if the isReading is not check
+    $("#UserBook_IsReading").change(function () {
+        isReadingCheck();
+    });
+
+    function isReadingCheck() {
+        var isReading = $("#UserBook_IsReading").prop("checked");
+        var dateReadAux;
+        var CanPublishItAux;
+        if (isReading) {
+            dateReadAux = $("#UserBook_DateRead").val();
+            $("#dateReadAux").val(dateReadAux);
+            $("#UserBook_DateRead").val('');
+            $("#UserBook_DateRead").prop("disabled", true);
+            $("#UserBook_Rating").prop("disabled", true);
+            CanPublishItAux = $("#UserBook_CanPublishIt").val();
+            $("#CanPublishItAux").val(CanPublishItAux);
+            $("#UserBook_CanPublishIt").prop("disabled", false);
+            $("#UserBook_CanPublishIt").prop("checked", false);
+            $("#UserBook_Review").prop("disabled", true);
+        } else {
+            dateReadAux = $("#dateReadAux").val();
+            $("#UserBook_DateRead").val(dateReadAux);
+            $("#UserBook_DateRead").prop("disabled", false);
+            $("#UserBook_Rating").prop("disabled", false);
+            CanPublishItAux = $("#CanPublishItAux").val();
+            $("#UserBook_CanPublishIt").prop("checked", CanPublishItAux);
+            $("#UserBook_CanPublishIt").prop("disabled", true);
+            $("#UserBook_Review").prop("disabled", false);
+        }
+    }
+
+    //Validation
+    $(window).ready(function () {
+        var titleBook = $("#titleBook").val();
+        var nameBook = $("#Book_NameBook").val();
+        //alert('t: ' + titleBook + ' ' +  'n: ' + nameBook);
+        if (titleBook == "" || nameBook == "") {
+            $("#sendBook").prop("disabled", true);
+        } else {
+            $("#sendBook").prop("disabled", false);
+        }
+    });
+
+    //receive what was typed and enable the button send
+    $("#titleBook").keyup(function () {
+        var searchTitle = $("#titleBook").val();
+        $("#Book_NameBook").val(searchTitle);
+        if (titleBook == "") {
+            $("#sendBook").prop("disabled", true);
+        } else {
+            $("#sendBook").prop("disabled", false);
+        }
+    });
+
+    //receive what was typed and enable the button send
+    $("#Book_NameBook").keyup(function () {
+        var nameBook = $("#Book_NameBook").val();
+        if (nameBook == "") {
+            $("#sendBook").prop("disabled", true);
+        } else {
+            $("#sendBook").prop("disabled", false);
+        }
+    });
+
+    //Counting words
+    $(document).ready(function () {
+        $("#UserBook_Review").on('keydown', function (e) {
+            var words = $.trim(this.value).length ? this.value.match(/\S+/g).length : 0;
+            if (words <= 300) {
+                $('#display_count').text(words);
+                $('#word_left').text(300 - words)
+            } else {
+                if (e.which !== 8) e.preventDefault();
+            }
+        });
+    });
+
+
+</script>

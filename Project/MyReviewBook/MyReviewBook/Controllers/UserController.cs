@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using MyReviewBook.Models;
 
 namespace MyReviewBook.Controllers
@@ -11,24 +12,18 @@ namespace MyReviewBook.Controllers
     public class UserController : Controller
     {
         IHttpContextAccessor HttpContextAccessor;
-        public UserController(IHttpContextAccessor httpContextAccessor)
+        ITempDataDictionaryFactory myTempData;
+        public UserController(IHttpContextAccessor httpContextAccessor, ITempDataDictionaryFactory tempData)
         {
             HttpContextAccessor = httpContextAccessor;
-        }
-
-        [HttpPost]
-        public IActionResult Login(string user, string password)
-        {
-            UserModel localUser = new UserModel();           
-            bool flagLogin = localUser.getLogin(user, password);
-            if (flagLogin)
+            myTempData = tempData;
+            DashboardModel dashboard = new DashboardModel(HttpContextAccessor, myTempData);
+            bool flag = dashboard.validUserSession();
+            if (flag)
             {
-                //Register user in session
-                HttpContext.Session.SetString("userSession", user);
-                return RedirectToAction("Index", "Dashboard");
+                dashboard.loadDataTemp(dashboard);
             }
-            TempData["message"] = "noLogin";
-            return RedirectToAction("Index", "Home");
+            RedirectToAction("Index", "Home");
         }
 
         [HttpPost]
@@ -55,11 +50,6 @@ namespace MyReviewBook.Controllers
             return RedirectToAction("Index", "Home");
         }
 
-        public IActionResult Logoff()
-        {
-            HttpContext.Session.SetString("userSession", "");
-            return RedirectToAction("Index", "Home");
-        }
         [HttpPost]
         public IActionResult ChangePassword(string user, string password)
         {

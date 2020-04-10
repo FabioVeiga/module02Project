@@ -1,0 +1,56 @@
+CREATE DATABASE `myreviewbook`;
+
+CREATE TABLE `user` (
+  `userId` int(11) NOT NULL AUTO_INCREMENT,
+  `userName` varchar(45) NOT NULL,
+  `userPass` varchar(45) NOT NULL,
+  `active` varchar(1) NOT NULL,
+  `picture` longtext,
+  `createDate` date NOT NULL,
+  `isFirstAccess` char(1) NOT NULL,
+  PRIMARY KEY (`userId`),
+  UNIQUE KEY `userName` (`userName`)
+);
+
+CREATE TABLE `userForgetPassword` (
+  `idUserForgotPassword` int(11) NOT NULL AUTO_INCREMENT,
+  `userId` int(11) NOT NULL,
+  `TypeData` text NOT NULL,
+  `ValidData` text NOT NULL,
+  `Question` text NOT NULL,
+  `AnsweredQuestion` text NOT NULL,
+  PRIMARY KEY (`idUserForgotPassword`),
+  KEY `userForgetPassword_fk0` (`userId`),
+  CONSTRAINT `userForgetPassword_fk0` FOREIGN KEY (`userId`) REFERENCES `user` (`userId`)
+);
+
+CREATE TABLE `books` (
+  `idBook` int(11) NOT NULL AUTO_INCREMENT,
+  `nameBook` varchar(255) NOT NULL,
+  `Author` text,
+  `PublishedDate` date DEFAULT NULL,
+  `QuantityPage` int(100) DEFAULT NULL,
+  `userId` int(15) NOT NULL,
+  `googleID` varchar(45) DEFAULT NULL,
+  PRIMARY KEY (`idBook`),
+  KEY `userId_idx` (`userId`),
+  CONSTRAINT `userId` FOREIGN KEY (`userId`) REFERENCES `user` (`userId`) ON DELETE NO ACTION ON UPDATE NO ACTION
+);
+
+CREATE TABLE `UserBook` (
+  `idUserBook` int(11) NOT NULL AUTO_INCREMENT,
+  `idUser` int(11) NOT NULL,
+  `idBook` int(11) DEFAULT NULL,
+  `idReading` tinyint(4) DEFAULT NULL,
+  `DateRead` date DEFAULT NULL,
+  `Rating` int(11) DEFAULT NULL,
+  `Review` text,
+  `CanPublishIt` tinyint(4) NOT NULL,
+  PRIMARY KEY (`idUserBook`),
+  KEY `UserBook_fk1` (`idUser`),
+  KEY `UserBook_fk2_idx` (`idBook`),
+  CONSTRAINT `UserBook_fk1` FOREIGN KEY (`idUser`) REFERENCES `user` (`userId`),
+  CONSTRAINT `UserBook_fk2` FOREIGN KEY (`idBook`) REFERENCES `books` (`idBook`) ON DELETE NO ACTION ON UPDATE NO ACTION
+);
+
+INSERT INTO `myreviewbook`.`user`(`userName`,`userPass`,`active`,`createDate`,`isFirstAccess`)VALUES('admin','adm1234',1,CURDATE(),0);

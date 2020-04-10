@@ -1,7 +1,8 @@
 ﻿@using Microsoft.AspNetCore.Http;
 @inject IHttpContextAccessor HttpContextAccessor
 @{
-    string userSession = @HttpContextAccessor.HttpContext.Session.GetString("userSession");
+    string userSession = TempData["userSession"].ToString();
+    int userId = int.Parse(TempData["userId"].ToString());
     string message = "";
     string typeMessage = "";
     string funcModal = "";
@@ -68,7 +69,7 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="#">MyReviewBook</a>
+                <a class="navbar-brand" asp-action="Index" asp-controller="Dashboard">MyReviewBook</a>
             </div>
             <!-- Collect the nav links, forms, and other content for toggling -->
             <div class="collapse navbar-collapse" id="bs-sidebar-navbar-collapse-1">
@@ -86,7 +87,6 @@
                                         <img id="imageProfile" src="@pictureUser" />
                                     }
                                 }
-
                             </a>
                         </div>
                         <div id="divHiUser">
@@ -99,7 +99,7 @@
                             <li><a href="#" onclick="openModel('changePassword')">Change password</a></li>
                             <li>
                                 <a asp-action="ChangeActive" asp-controller="User" data-toggle="tooltip" data-placement="right" title="If you deactivate, you just can do a LOGIN, no more!">
-                                    @{labelUserActived = (isUserActived == char.Parse("1") ? "Activate" : "Deactivate");}@labelUserActived
+                                    @{labelUserActived = (isUserActived == char.Parse("1") ? "Deactivate" : "Activate");}@labelUserActived
                                     <span style="font-size:16px;" class="pull-right hidden-xs">
                                         @{
                                             if (isUserActived == '1')
@@ -115,11 +115,27 @@
                                     </span>
                                 </a>
                             </li>
-                            <li><a asp-action="Logoff" asp-controller="User">Logoff</a></li>
+                            <li><a asp-action="Logoff" asp-controller="Dashboard">Logoff</a></li>
                         </ul>
                     </li>
-                    <li><a href="#">Messages<span style="font-size:16px;" class="pull-right hidden-xs showopacity glyphicon glyphicon-envelope"></span></a></li>
+                    @*<li><a href="#">Books<span style="font-size:16px;" class="pull-right hidden-xs showopacity glyphicon glyphicon-book"></span></a></li>*@
                     @{
+                        if (isUserActived == '1')
+                        {
+                            <li class="dropdown">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Reviews <span class="caret"></span><span style="font-size:16px;" class="pull-right hidden-xs showopacity glyphicon glyphicon glyphicon-bookmark"></span></a>
+                                <ul class="dropdown-menu forAnimate" role="menu">
+                                    <li><a asp-action="Manage" asp-controller="UserBook">New review</a></li>
+                                    <li><a href="#">My reviews</a></li>
+                                </ul>
+                            </li>
+                            <li class="dropdown">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Books <span class="caret"></span><span style="font-size:16px;" class="pull-right hidden-xs showopacity glyphicon glyphicon-book"></span></a>
+                                <ul class="dropdown-menu forAnimate" role="menu">
+                                    <li><a asp-action="Index" asp-controller="Book">Catalog</a></li>
+                                </ul>
+                            </li>
+                        }
                         if (userSession == "admin")
                         {
                             <li class="dropdown">
@@ -194,7 +210,7 @@
                                             <input type="text" class="form-control" name="urlPicture" id="urlPicture" placeholder="Paste your URL">
                                         </div>
                                         <hr />
-                                        <span class="alert alert-info">Or keep it blank to set up the dafault picture</span>
+                                        <span class="alert alert-info">Or keep it blank to set up as yoyr dafault picture</span>
                                         <div class="modal-footer">
                                             <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                                             <button type="submit" class="btn btn-success">Save</button>
@@ -204,7 +220,7 @@
                             }
                             else
                             {
-                                <script> document.getElementById("titleModal").innerHTML = "Warning"</script>
+                                <script>document.getElementById("titleModal").innerHTML = "Warning"</script>
                                 <div class="alert alert-danger" role="alert">
                                     <b>Attention!</b> You are not activated.
                                 </div>

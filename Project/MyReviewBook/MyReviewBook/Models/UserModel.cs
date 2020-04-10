@@ -27,7 +27,6 @@ namespace MyReviewBook.Models
             return @HttpContextAccessor.HttpContext.Session.GetString("userSession");
         }
 
-
         public bool getLogin(string user, string pass)
         {
             string sql = $"select username, userpass from user where username = '{user.ToLower()}' and userpass = '{pass}'";
@@ -42,6 +41,7 @@ namespace MyReviewBook.Models
                     return true;
                 }
             }
+            
             return false;
         }
 
@@ -59,14 +59,12 @@ namespace MyReviewBook.Models
                 return false;
             }
         }
-
-        public char GetFirstAccess(string user)
+        public char getFirstAccess(string user)
         {
             string sql = $"select isFirstAccess from user where username = '{user.ToLower()}'";
             ConnectionDB connection = new ConnectionDB();
             DataTable dt = connection.executeSelect(sql);
             return char.Parse(dt.Rows[0]["isFirstAccess"].ToString());
-            
         }
 
         public bool getUser(string user)
@@ -81,6 +79,7 @@ namespace MyReviewBook.Models
                     return false;
                 }
             }
+            
             return true;
         }
 
@@ -130,7 +129,6 @@ namespace MyReviewBook.Models
             }
             string sql  = $"update user set active = '{currentActiveUser}' where username = '{user}'";
             ConnectionDB connection = new ConnectionDB();
-            connection.executeComandSQL(sql);
             return currentActiveUser;
         }
 
@@ -212,6 +210,21 @@ namespace MyReviewBook.Models
                 }
             }
             return false;
+        }
+
+        public int validUserId(string user)
+        {
+            string sql = $"select userId from user where userName = '{user.ToLower()}'";
+            ConnectionDB connection = new ConnectionDB();
+            DataTable dt = connection.executeSelect(sql);
+            if (dt != null)
+            {
+                if (dt.Rows.Count == 1)
+                {
+                    return int.Parse(dt.Rows[0]["userId"].ToString());
+                }
+            }
+            return 0;
         }
 
         public string[] getValidData(string user)
