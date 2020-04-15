@@ -7,7 +7,7 @@
     try
     {
         message = TempData["message"].ToString();
-        if(message != null)
+        if (message != null)
         {
             switch (message)
             {
@@ -68,10 +68,12 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a asp-area="" asp-controller="Home" asp-action="Index" class="navbar-brand">MyReviewBook</a>
+                <a asp-area="" asp-controller="Home" asp-action="Index" class="navbar-brand">
+                    <img src="~/images/Logo.png" style="width:50px; height:50px; margin-top:-15px;" />
+                </a>
             </div>
             <div class="navbar-collapse collapse">
-                <ul class="nav navbar-nav">
+                <ul class="nav navbar-nav disabled">
                     <li><a href="#">How it works</a></li>
                 </ul>
                 <form asp-controller="Dashboard" asp-action="Login" class="navbar-form navbar-left">
@@ -103,7 +105,7 @@
     <div id="footer">
         <p>&copy; 2020-<label id="yearCurrent"></label></p>
     </div>
-    
+
     <div class="modal fade" id="messageModal" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-sm">
             <div class="modal-content">
@@ -197,6 +199,6 @@
     document.getElementById("yearCurrent").innerHTML = d.getFullYear();
 
     function openModel(modalName) {
-        $("#"+modalName).modal()
+        $("#" + modalName).modal()
     }
 </script>

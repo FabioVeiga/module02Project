@@ -14,7 +14,7 @@ namespace MyReviewBook.Useful
         private string DataBase = "myreviewbook";
         private string User = "root";
         private string Pass = "12345678";
-        private string max_pool_size = "100";
+        private string max_pool_size = "1000";
         private MySqlConnection conn;
 
         public ConnectionDB()
@@ -43,8 +43,11 @@ namespace MyReviewBook.Useful
             }
             catch (Exception e)
             {
-                closeConnection();
                 throw e;
+            }
+            finally
+            {
+                closeConnection();
             }
             
         }
@@ -58,8 +61,11 @@ namespace MyReviewBook.Useful
             }
             catch (Exception e)
             {
-                closeConnection();
                 throw e;
+            }
+            finally
+            {
+                closeConnection();
             }
         }
 

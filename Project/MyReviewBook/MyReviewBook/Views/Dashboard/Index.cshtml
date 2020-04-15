@@ -1,5 +1,244 @@
-﻿@{
+﻿@model DashboardModel
+@using MyReviewBook.Useful
+@{
     Layout = "../Shared/_LayoutIntern.cshtml";
-}
+    string textSearched = "";
+    string qntBook = TempData["qntBook"].ToString();
+    string qntBookRead = TempData["qntBookRead"].ToString();
+    string qntBookReading = TempData["qntBookReading"].ToString();
+    int userId = int.Parse(TempData["userId"].ToString());
+    try
+    {
 
-<h2>logado</h2>
+        textSearched = TempData["textSearched"].ToString();
+    }
+    catch { }
+}
+<style>
+    #divDashMain {
+    }
+
+    #divDashStatusTitle {
+        text-align: center;
+        background-color: #222;
+        padding: 3px;
+    }
+
+    #divDashStatus {
+        border: 1px solid #808080;
+        border-radius: 5px;
+        width: 100%;
+    }
+
+    .status {
+        float: left;
+        width: 33.33%;
+        padding: 25px;
+        background-color: #222;
+        font-size: 25px;
+    }
+
+    .DivDashStatus::after {
+        content: "";
+        clear: both;
+        display: table;
+    }
+
+    .statusType {
+        text-align: center;
+        font-weight: bold;
+        background-color: #bababa;
+        padding: 5px;
+    }
+
+    .statusItem {
+        text-align: center;
+        background-color: #999;
+        font-size: 15px;
+    }
+
+    #divDashBooks {
+        margin-top: 7%;
+    }
+</style>
+
+<div id="divDashMain">
+    <div class="DivDashStatus">
+        <div class="status">
+            <div class="statusType">@qntBook</div>
+            <div class="statusItem">BOOKS</div>
+        </div>
+        <div class="status">
+            <div class="statusType">@qntBookRead</div>
+            <div class="statusItem">READ</div>
+        </div>
+        <div class="status">
+            <div class="statusType">@qntBookReading</div>
+            <div class="statusItem">READING</div>
+        </div>
+    </div>
+    <div id="divDashBooks">
+        @{
+            if (ViewBag.ListBook != null)
+            {
+                <div class="input-group">
+                    <input type="text" class="form-control" placeholder="Search a book" id="search" value="@textSearched">
+                    <div class="input-group-btn">
+                        <a class="btn btn-default" id="linkSearch" href="">
+                            <i class="glyphicon glyphicon-search"></i>
+                        </a>
+                    </div>
+                </div>
+                <div id="divTable">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th scope="col">#</th>
+                                <th scope="col" width="300px">Name</th>
+                                <th scope="col">Author</th>
+                                <th scope="col">Am I Reading</th>
+                                <th scope="col">Date Read</th>
+                                <th scope="col">Rating</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @{
+                                foreach (var item in (List<DashboardModel>)ViewBag.ListBook)
+                                {
+                                    <tr>
+                                        <th scope="row">
+                                            <form asp-action="Manage" asp-controller="UserBook">
+                                                <input type="hidden" asp-for="Book.NameBook" value="@item.Book.NameBook" />
+                                                <input type="hidden" asp-for="Book.Author" value="@item.Book.Author" />
+                                                <input type="hidden" asp-for="Book.PublishedData" value="@Helper.formatDate(item.Book.PublishedData.ToString())" />
+                                                <input type="hidden" asp-for="Book.QuantityPage" value="@item.Book.QuantityPage" />
+                                                <input type="hidden" asp-for="Book.GoogleId" value="@item.Book.GoogleId" />
+                                                <input type="hidden" asp-for="Book.IdBook" value="@item.Book.IdBook" />
+                                                <input type="hidden" asp-for="UserBook.IsReading" value="@item.UserBook.IsReading" />
+                                                <input type="hidden" asp-for="UserBook.DateRead" value="@Helper.formatDate(item.UserBook.DateRead.ToString())" />
+                                                <input type="hidden" asp-for="UserBook.Rating" value="@item.UserBook.Rating" />
+                                                <input type="hidden" asp-for="UserBook.Review" value="@item.UserBook.Review" />
+                                                <input type="hidden" asp-for="UserBook.CanPublishIt" value="@item.UserBook.CanPublishIt" />
+                                                <input type="hidden" name="typeAction" value="edit" />
+                                                <button class="btn btn-info" type="submit">Edit</button>
+                                            </form>
+                                        </th>
+                                        <td>
+                                            @item.Book.NameBook.ToString()
+                                        </td>
+                                        <td>
+                                            @item.Book.Author.ToString()
+                                        </td>
+                                        <td>
+                                            @(item.UserBook.IsReading.ToString() == "False" ? "No" : "Yes")
+                                        </td>
+                                        <td>
+                                            @Helper.formatDate(item.UserBook.DateRead.ToString())
+                                        </td>
+                                        <td>
+                                            @{
+                                                int totalStarts = int.Parse(item.UserBook.Rating.ToString());
+                                                string[] stars = new string[5];
+                                                int cont = 0;
+                                                if (totalStarts > 0)
+                                                {
+                                                    for (cont = 1; cont <= totalStarts; cont++)
+                                                    {
+                                                        <text><i class="glyphicon glyphicon-star"></i></text>
+                                                    }
+                                                    for (int i = cont; i <= 5; i++)
+                                                    {
+                                                        <text><i class="glyphicon glyphicon-star-empty"></i></text>
+                                                    }
+                                                }
+                                                else
+                                                {
+                                                    <text>No rating</text>
+                                                }
+                                            }
+                                        </td>
+                                    </tr>
+                                }
+                            }
+                        </tbody>
+                    </table>
+                </div>
+                <div style="text-align:center;">
+                    @{
+                        int totalRegister = int.Parse(TempData["totalRegister"].ToString());
+                        int quantityPage = int.Parse(TempData["quantityPage"].ToString());
+                        int currentPage = int.Parse(TempData["currentPage"].ToString());
+                        var totalPage = totalRegister / quantityPage;
+                        if (currentPage > 0)
+                        {
+                            if (quantityPage > totalPage)
+                            {
+                                totalPage += 1;
+                            }
+                        }
+                    }
+                    <ul class="pagination">
+                        @{
+                            if (currentPage == 1)
+                            {
+                                <li class="page-item disabled">
+                                    <a class="page-link" href="#">
+                                        <span class="glyphicon glyphicon-fast-backward">
+                                        </span>
+                                    </a>
+                                </li>
+                            }
+                            if (currentPage > 1)
+                            {
+                                <li class="page-item">
+                                    <a class="page-link" href="?currentPage=1&search=@textSearched">
+                                        <span class="glyphicon glyphicon-fast-backward">
+                                        </span>
+                                    </a>
+                                </li>
+                                <li class="page-item">
+                                    <a class="page-link" href="?currentPage=@(currentPage - 1)&search=@textSearched">
+                                        <span class="glyphicon glyphicon-step-backward">
+                                        </span>
+                                    </a>
+                                </li>
+                            }
+                            <li class="page-item disabled"><a class="page-link" href="#">@currentPage</a></li>
+                            if (currentPage < totalPage)
+                            {
+                                <li class="page-item">
+                                    <a class="page-link" href="?currentPage=@(currentPage + 1)&search=@textSearched">
+                                        <span class="glyphicon glyphicon-step-forward">
+                                        </span>
+                                    </a>
+                                </li>
+                                <li class="page-item">
+                                    <a class="page-link" href="?currentPage=@totalPage&search=@textSearched">
+                                        <span class="glyphicon glyphicon-fast-forward">
+                                        </span>
+                                    </a>
+                                </li>
+                            }
+                            if (currentPage == totalPage)
+                            {
+                                <li class="page-item disabled">
+                                    <a class="page-link" href="#">
+                                        <span class="glyphicon glyphicon-fast-forward">
+                                        </span>
+                                    </a>
+                                </li>
+                            }
+                        }
+                    </ul>
+                </div>
+            }
+        }
+    </div>
+</div>
+
+<script>
+    $("#search").keyup(function () {
+        var aux = "?search=" + $("#search").val();
+        $("#linkSearch").attr("href",aux);
+    })
+</script>

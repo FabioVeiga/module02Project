@@ -10,8 +10,25 @@ namespace MyReviewBook.Controllers
 {
     public class HomeController : Controller
     {
-        public IActionResult Index()
+        public IActionResult Index(int limit, string search)
         {
+            DashboardModel dashboard = new DashboardModel();
+            if(limit == 0)
+            {
+                limit = 5;
+            }
+            else
+            {
+                limit += 5;
+            }
+            if(search == null)
+            {
+                search = "";
+            }
+            TempData["limit"] = limit;
+            TempData["search"] = search;
+            TempData["totalRegister"] = dashboard.UserBook.totalRegisterIndex(search);
+            ViewBag.ListReview = dashboard.UserBook.getReviewsForIndex(limit, search);
             return View();
         }
 

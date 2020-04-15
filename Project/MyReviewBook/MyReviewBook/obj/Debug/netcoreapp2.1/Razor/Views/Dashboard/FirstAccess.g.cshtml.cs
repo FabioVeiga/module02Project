@@ -93,7 +93,7 @@ using MyReviewBook.Models;
         ");
             EndContext();
             BeginContext(671, 2083, false);
-            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("form", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "f3e044a835ca4acaa5a958f4848a52cb", async() => {
+            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("form", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "c574b6d5d9a24845b33cb57eb253a9e3", async() => {
                 BeginContext(735, 336, true);
                 WriteLiteral(@"
             <div class=""divFirstAccess"" id=""divValidData"">
@@ -104,7 +104,7 @@ using MyReviewBook.Models;
                         ");
                 EndContext();
                 BeginContext(1071, 42, false);
-                __tagHelperExecutionContext = __tagHelperScopeManager.Begin("option", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "6621490bf1dc4647a6fb8fe05560db6f", async() => {
+                __tagHelperExecutionContext = __tagHelperScopeManager.Begin("option", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "05dbb5df4da348d599e0c6fd9f62db3d", async() => {
                     BeginContext(1096, 8, true);
                     WriteLiteral("Birthday");
                     EndContext();
@@ -126,7 +126,7 @@ using MyReviewBook.Models;
                 WriteLiteral("\r\n                        ");
                 EndContext();
                 BeginContext(1139, 44, false);
-                __tagHelperExecutionContext = __tagHelperScopeManager.Begin("option", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "0bd2b66465b84b979dd3b63e058934fd", async() => {
+                __tagHelperExecutionContext = __tagHelperScopeManager.Begin("option", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "bc323cf7ed154cd29c675e4169cb34e2", async() => {
                     BeginContext(1161, 13, true);
                     WriteLiteral("Address Email");
                     EndContext();
@@ -148,7 +148,7 @@ using MyReviewBook.Models;
                 WriteLiteral("\r\n                        ");
                 EndContext();
                 BeginContext(1209, 36, false);
-                __tagHelperExecutionContext = __tagHelperScopeManager.Begin("option", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "e30b0d8fa81449b2917428cff7376cd2", async() => {
+                __tagHelperExecutionContext = __tagHelperScopeManager.Begin("option", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "abc66f5643614ea98152a8ec5d7e9241", async() => {
                     BeginContext(1231, 5, true);
                     WriteLiteral("Phone");
                     EndContext();
@@ -170,7 +170,7 @@ using MyReviewBook.Models;
                 WriteLiteral("\r\n                        ");
                 EndContext();
                 BeginContext(1271, 50, false);
-                __tagHelperExecutionContext = __tagHelperScopeManager.Begin("option", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "ee053db9fc424fddac989334c224f000", async() => {
+                __tagHelperExecutionContext = __tagHelperScopeManager.Begin("option", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "ec44f0366cd745a3a89aefa5b87a7900", async() => {
                     BeginContext(1299, 13, true);
                     WriteLiteral("Mother’s name");
                     EndContext();
@@ -192,7 +192,7 @@ using MyReviewBook.Models;
                 WriteLiteral("\r\n                        ");
                 EndContext();
                 BeginContext(1347, 49, false);
-                __tagHelperExecutionContext = __tagHelperScopeManager.Begin("option", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "cc26e82b0fe44d9f8184c2411129565b", async() => {
+                __tagHelperExecutionContext = __tagHelperScopeManager.Begin("option", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "3110dfe2318f446e994ad3762368f955", async() => {
                     BeginContext(1374, 13, true);
                     WriteLiteral("Father’s name");
                     EndContext();

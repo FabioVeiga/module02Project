@@ -98,7 +98,7 @@ using MyReviewBook.Models;
             WriteLiteral("                ");
             EndContext();
             BeginContext(1007, 654, false);
-            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("form", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "4f78ad4a66de4109bdc7967779a7af04", async() => {
+            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("form", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "7768cc366f1a40c6b18f132d1d772de8", async() => {
                 BeginContext(1069, 324, true);
                 WriteLiteral(@"
                     <label>Type your user</label>
@@ -167,7 +167,7 @@ WriteAttributeValue("", 1997, userValid, 1997, 10, false);
             WriteLiteral(">\r\n            </div>\r\n            <div id=\"divForgotStep02\">\r\n                <hr />\r\n                ");
             EndContext();
             BeginContext(2111, 796, false);
-            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("form", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "b80b43f8b2f74c5da3b21e1573ae537a", async() => {
+            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("form", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "8e7571194c984e2c81c37990bcf99a62", async() => {
                 BeginContext(2173, 64, true);
                 WriteLiteral("\r\n                    <input type=\"hidden\" id=\"user\" name=\"user\"");
                 EndContext();
@@ -269,7 +269,7 @@ WriteAttributeValue("", 3543, dataValid, 3543, 10, false);
             WriteLiteral(">\r\n            </div>\r\n            <div id=\"divForgotStep03\">\r\n                <hr />\r\n                ");
             EndContext();
             BeginContext(3657, 674, false);
-            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("form", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "f10d8e1ef05245b3b8e45cb165f6ed83", async() => {
+            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("form", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "6539e3d2ba1e40d491f00636693fc7d3", async() => {
                 BeginContext(3719, 64, true);
                 WriteLiteral("\r\n                    <input type=\"hidden\" id=\"user\" name=\"user\"");
                 EndContext();
@@ -333,7 +333,7 @@ WriteAttributeValue("", 3791, userValid, 3791, 10, false);
             WriteLiteral("            <div id=\"divshowPassword\">\r\n                ");
             EndContext();
             BeginContext(4473, 772, false);
-            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("form", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "66744c3080b741a7a62835ebc14e84ed", async() => {
+            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("form", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "3fbed25d3ae14424bc88a58b48c13b1d", async() => {
                 BeginContext(4525, 248, true);
                 WriteLiteral("\r\n                    <div class=\"input-group\">\r\n                        <span class=\"input-group-addon\"><i class=\"glyphicon glyphicon-user\"></i></span>\r\n                        <input id=\"user\" type=\"text\" class=\"form-control\" name=\"user\" readonly");
                 EndContext();

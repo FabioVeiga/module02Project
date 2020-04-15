@@ -69,7 +69,9 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" asp-action="Index" asp-controller="Dashboard">MyReviewBook</a>
+                <a class="navbar-brand" asp-action="Index" asp-controller="Dashboard">
+                    <img src="~/images/Logo01.png" style="width:120px; text-align:center; margin-left:20px;" />
+                </a>
             </div>
             <!-- Collect the nav links, forms, and other content for toggling -->
             <div class="collapse navbar-collapse" id="bs-sidebar-navbar-collapse-1">
@@ -161,7 +163,7 @@
         @RenderBody()
 
         <div class="modal fade" id="Modal" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
-            <div class="modal-dialog modal-sm">
+            <div class="modal-dialog modal-sm" style="margin-left: -200px;">
                 <div class="modal-content">
                     <div class="modal-header text-center">
                         <h3 id="titleModal"></h3>

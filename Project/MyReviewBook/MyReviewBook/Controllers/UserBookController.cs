@@ -86,7 +86,7 @@ namespace MyReviewBook.Controllers
                dashboard.Book.updateBook(dashboard.Book);
             }
             
-            return RedirectToAction("Index", "Book");
+            return RedirectToAction("Index", "Dashboard");
         }
 
         public IActionResult searchBook(string titleBook, string typeAction)
@@ -118,5 +118,16 @@ namespace MyReviewBook.Controllers
             ViewBag.ListBook = listBooksService;
             return View("Manage");
         }
+
+        public IActionResult EditUserBook(int IdUserBook)
+        {
+            DashboardModel dashboard = new DashboardModel(HttpContextAccessor);
+            string userNameSession = dashboard.getUserSession();
+            int userId = dashboard.User.validUserId(userNameSession);
+            dashboard = dashboard.UserBook.getUserBook(IdUserBook, userId);
+            TempData["typeAction"] = "edit";
+            return View("Manage");
+        }
+
     }
 }

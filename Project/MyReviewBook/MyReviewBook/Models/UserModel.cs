@@ -11,8 +11,9 @@ namespace MyReviewBook.Models
 {
     public class UserModel
     {
-        private string UserName { get; set; }
+        public string UserName { get; set; }
         private string UserPass { get; set; }
+        public string UrlPicture { get; set; }
         public IHttpContextAccessor HttpContextAccessor { get; set; }
         
         public UserModel() { }

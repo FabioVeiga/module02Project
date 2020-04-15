@@ -44,7 +44,7 @@ namespace MyReviewBook.Controllers
             HttpContext.Session.SetString("userSession", "");
             return RedirectToAction("Index", "Home");
         }
-
+        [HttpPost]
         public IActionResult Index()
         {
             DashboardModel dashboard = new DashboardModel(HttpContextAccessor);
@@ -52,6 +52,7 @@ namespace MyReviewBook.Controllers
             bool flag = dashboard.validUserSession();
             if (flag)
             {
+                int idUser = dashboard.User.validUserId(userSession);
                 char firstAcess = dashboard.User.getFirstAccess(userSession);
                 if (firstAcess == '1')
                 {
@@ -59,6 +60,61 @@ namespace MyReviewBook.Controllers
                 }
                 else
                 {
+                    //bring dats to status
+                    string[] status = dashboard.UserBook.getStatusUser(idUser);
+                    TempData["qntBook"] = status[0];
+                    TempData["qntBookRead"] = status[1];
+                    TempData["qntBookReading"] = status[2];
+                    TempData["userId"] = idUser;
+                    TempData["totalRegister"] = dashboard.UserBook.TotalRegister(idUser,"");
+                    TempData["currentPage"] = 1;
+                    TempData["quantityPage"] = 5;
+                    ViewBag.ListBook = dashboard.UserBook.getListUserBook(idUser, 5, 1, "");
+                    return View();
+                }
+            }
+            else
+            {
+                return RedirectToAction("Index", "Home");
+            }
+        }
+        [HttpGet]
+        public IActionResult Index(int currentPage, string search)
+        {
+            DashboardModel dashboard = new DashboardModel(HttpContextAccessor);
+            string userSession = dashboard.getUserSession();
+            bool flag = dashboard.validUserSession();
+            if (flag)
+            {
+                int idUser = dashboard.User.validUserId(userSession);
+                char firstAcess = dashboard.User.getFirstAccess(userSession);
+                if (firstAcess == '1')
+                {
+                    return RedirectToAction("FirstAccess", "Dashboard");
+                }
+                else
+                {
+                    //bring dats to status
+                    string[] status = dashboard.UserBook.getStatusUser(idUser);
+                    TempData["qntBook"] = status[0];
+                    TempData["qntBookRead"] = status[1];
+                    TempData["qntBookReading"] = status[2];
+                    TempData["userId"] = idUser;
+                    if (currentPage == 0)
+                    {
+                        currentPage = 1;
+                        
+                    }
+                    if (search == null)
+                    {
+                        search = "";
+                    }
+                    TempData["currentPage"] = currentPage;
+                    TempData["totalRegister"] = dashboard.UserBook.TotalRegister(idUser, search);
+                    TempData["quantityPage"] = 5;
+                    TempData["textSearched"] = search;
+                    ViewBag.ListBook = dashboard.UserBook.getListUserBook(idUser,5,currentPage,search);
+
                     return View();
                 }
             }
